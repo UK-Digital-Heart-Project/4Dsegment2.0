@@ -1,10 +1,10 @@
-# Deep learning cardiac segmentation and motion tracking (4D*segment*) [![DOI](https://zenodo.org/badge/177131553.svg)](https://zenodo.org/badge/latestdoi/177131553)
+# Deep learning cardiac segmentation and motion tracking (4D*segment2.0*) for UK Biobank
 
 ![](data/screen.gif)
 :--:
 *Motion tracking using our pipeline. Left: without shape refinement; Right: with shape refinement*
 
-The code in this repository implements 4D*segment*, a pipeline for carrying out deep learning segmentation, non-rigid co-registration, mesh generation and motion tracking using raw grey-scale cardiac MRI data in NIfTI format. The implementation was first trained using manual annotations and then deployed on pulmonary hypertension (PH) patients to produce segmentation labels and computational meshes. The whole process is fully automated without any manual input. 
+The code in this repository implements 4D*segment2.0*, a pipeline for carrying out deep learning segmentation, non-rigid co-registration, mesh generation and motion tracking using raw grey-scale cardiac MRI data in NIfTI format. The implementation was first trained using manual annotations and then deployed on UKBB data to produce segmentation labels and computational meshes. The whole process is fully automated without any manual input. 
 
 # Overview
 The files in this repository are organized into 3 directories:
@@ -15,7 +15,7 @@ The files in this repository are organized into 3 directories:
   * fitting meshes to high-resolution model - [code/meshfitting.py](code/meshfitting.py)
   * useful image processing functions used in the pipeline - [code/image_utils.py](code/image_utils.py)
   * downsample mesh resolution while remain its geometry - [code/decimation.py](code/decimation.py)
-* [model](model) : contains a tensorflow model pre-trained on ~400 manual annotations on PH patients
+* [model](model) : contains a tensorflow model pre-trained on manual annotations in UKBB
 * [data](data) : data download address, which contains three sample datasets (4D NIfTI) on which functions from the `code` directory can be run. You should download the data and place them into the folder.
 
 To run the code in the [code](code) directory, we provide a [Docker](https://www.docker.com) image with all the necessary dependencies pre-compiled. 
@@ -77,7 +77,7 @@ will run the code using 8 CPU cores on your local computer (change the number to
 
 ## 2. Outputs from the pipeline
 
-Once the pipeline is finished, under the root directory of each subject, you have three nifti files, i.e., `lvsa_.nii.gz`, `lvsa_ED_enlarged_SR.nii.gz` and `lvsa_ES_enlarged_SR.nii.gz`, and two segmentations, i.e., `PHsegmentation_ED.gipl` and `PHsegmentation_ES.gipl`. `lvsa_.nii.gz` is the original 4D raw data and `PHsegmentation_ED.gipl` and `PHPHsegmentation_ES.gipl` are segmentations of `lvsa_ED_enlarged_SR.nii.gz` and `lvsa_ES_enlarged_SR.nii.gz`. Note that these segmentations are smooth, high-resolution bi-ventricular three-dimensional models. 
+Once the pipeline is finished, under the root directory of each subject, you have three nifti files, i.e., `lvsa_.nii.gz`, `lvsa_ED_enlarged_SR.nii.gz` and `lvsa_ES_enlarged_SR.nii.gz`, and two segmentations, i.e., `UKBBsegmentation_ED.gipl` and `UKBBsegmentation_ES.gipl`. `lvsa_.nii.gz` is the original 4D raw data and `PHsegmentation_ED.gipl` and `PHPHsegmentation_ES.gipl` are segmentations of `lvsa_ED_enlarged_SR.nii.gz` and `lvsa_ES_enlarged_SR.nii.gz`. Note that these segmentations are smooth, high-resolution bi-ventricular three-dimensional models. 
 
 You also have meshes (txt files) for left and right ventricles at ED and ES under the root directory. For example, `lv_myoed_curvature.txt` records the curvature of each vertex on myocardium of left ventricle at ED. `lv_myoed_wallthickness.txt` records the wall thickness of each vertex on epicardium of left ventricle at ED. `lv_myoed_signeddistances.txt` records the sign distance of each vertex on epicardium of left ventricle at ED, by referring to a template. `lv_myoed_curvature.txt`, `lv_myoes_wallthickness.txt` and `lv_myoes_signeddistances.txt` have the same meanings for left ventricle at ES. There are also counterparts for right ventricle at ED and ES. 
 
