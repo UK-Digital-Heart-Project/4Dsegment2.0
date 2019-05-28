@@ -23,16 +23,17 @@ FLAGS = tf.app.flags.FLAGS
 
 
 
-tf.app.flags.DEFINE_integer('coreNo', 8, 'Number of CPUs.')
-tf.app.flags.DEFINE_string('test_dir', '/data',
-                           'Path to the test set directory, under which images are organised in '
-                           'subdirectories for each subject.')
-tf.app.flags.DEFINE_string('model_path',  '/model/vgg_RE_network.ckpt-50000', 'Path to the saved trained model.')
-tf.app.flags.DEFINE_string('atlas_dir',  '/refs', 'Path to the atlas.')
-tf.app.flags.DEFINE_string('param_dir', '/par', 'Path to the registration parameters.')
-tf.app.flags.DEFINE_string('template_dir', '/vtks/1', 'Path to the template.')
-tf.app.flags.DEFINE_string('template_PH', '/vtks/2', 'Path to the template.')
-tf.app.flags.DEFINE_boolean('irtk', True, 'use irtk or not')
+tf.app.flags.DEFINE_integer('coreNo', 18,   'Number of CPUs.')
+tf.app.flags.DEFINE_string('test_dir',      '/cardiac/UKBB_40616/1003323_test',
+                                            'Path to the test set directory, under which images are organised in '
+                                            'subdirectories for each subject.')
+tf.app.flags.DEFINE_string('model_path',    '/model/FCN_sa', 'Path to the saved trained model.')
+tf.app.flags.DEFINE_string('atlas_dir',     '/cardiac/patchmatchSegmentation/3datlas2', 'Path to the atlas.')
+#tf.app.flags.DEFINE_string('atlas_dir',     '/refs', 'Path to the atlas.')
+tf.app.flags.DEFINE_string('param_dir',     '/par', 'Path to the registration parameters.')
+tf.app.flags.DEFINE_string('template_dir',  '/vtks/1', 'Path to the template.')
+tf.app.flags.DEFINE_string('template_PH',   '/vtks/2', 'Path to the template.')
+tf.app.flags.DEFINE_boolean('irtk', True,   'use irtk or not')
 
 if __name__ == '__main__':
     
@@ -40,17 +41,29 @@ if __name__ == '__main__':
         table_time = []
         start_time = time.time()
 
-        deeplearningseg(FLAGS.model_path, FLAGS.test_dir, FLAGS.atlas_dir)
-                 
-        # multiatlasreg2D(FLAGS.test_dir, FLAGS.atlas_dir, FLAGS.param_dir, FLAGS.coreNo, True, FLAGS.irtk) # parallel, irtk
-
-        multiatlasreg3D(FLAGS.test_dir, FLAGS.atlas_dir, FLAGS.param_dir, FLAGS.coreNo, True, FLAGS.irtk) # parallel, irtk
-
-        meshCoregstration(FLAGS.test_dir, FLAGS.param_dir, FLAGS.template_dir, FLAGS.coreNo, True, False) # parallel, irtk
-
-        motionTracking(FLAGS.test_dir, FLAGS.param_dir, FLAGS.template_PH, FLAGS.coreNo, True) # parallel
+        # works
         
-        decimate(FLAGS.test_dir, FLAGS.coreNo, False) 
+        #deeplearningseg(FLAGS.model_path, FLAGS.test_dir, FLAGS.atlas_dir)
+
+        #print("\n\n ... Done deeplearningseg")
+                 
+        multiatlasreg2D(FLAGS.test_dir, FLAGS.atlas_dir, FLAGS.param_dir, FLAGS.coreNo, False, FLAGS.irtk) # parallel, irtk
+
+        multiatlasreg3D(FLAGS.test_dir, FLAGS.atlas_dir, FLAGS.param_dir, FLAGS.coreNo, False, FLAGS.irtk) # parallel, irtk
+
+        print("\n\n ... Done multiatlasreg3D")
+
+        #meshCoregstration(FLAGS.test_dir, FLAGS.param_dir, FLAGS.template_dir, FLAGS.coreNo, True, False) # parallel, irtk
+
+        #print("\n\n ... Done meshCoregstration")
+
+        #motionTracking(FLAGS.test_dir, FLAGS.param_dir, FLAGS.template_PH, FLAGS.coreNo, True) # parallel
+
+        #print("\n\n ... Done motionTracking")
+        
+        #decimate(FLAGS.test_dir, FLAGS.coreNo, False) 
+
+        #print("\n\n ... Done decimate")
 
         process_time = time.time() - start_time 
         print('Including image I/O, CUDA resource allocation, '

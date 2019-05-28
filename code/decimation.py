@@ -16,17 +16,17 @@ def track_cine(data_dir, par_dir, tamplate_dir):
 
     # Split 4D nifti into time phases
     os.system('splitvolume '
-              '{0}/lvsa_.nii.gz '
-              '{1}/lvsa_ '
+              '{0}/sa_.nii.gz '
+              '{1}/sa_ '
               '-sequence'
               .format(data_dir, motion_dir))
 
-    n_frame = len(glob.glob('{0}/lvsa_??.nii.gz'.format(motion_dir)))
+    n_frame = len(glob.glob('{0}/sa_??.nii.gz'.format(motion_dir)))
 
     # Inter-frame motion estimation
     for fr in range(1, n_frame):
-        target = '{0}/lvsa_{1:02d}.nii.gz'.format(motion_dir, fr-1)
-        source = '{0}/lvsa_{1:02d}.nii.gz'.format(motion_dir, fr)
+        target = '{0}/sa_{1:02d}.nii.gz'.format(motion_dir, fr-1)
+        source = '{0}/sa_{1:02d}.nii.gz'.format(motion_dir, fr)
         par = '{0}/ffd_motion.cfg'.format(par_dir)
         dof = '{0}/ffd_{1:02d}_to_{2:02d}.dof.gz'.format(motion_dir, fr-1, fr)
 
@@ -55,8 +55,8 @@ def track_cine(data_dir, par_dir, tamplate_dir):
     # Composition of inter-frame motion fields can lead to accumulative errors. At this step, we refine the motion fields
     # by re-registering the n-th frame with the ED frame.
     for fr in range(2, n_frame):
-        target = '{0}/lvsa_00.nii.gz'.format(motion_dir)
-        source = '{0}/lvsa_{1:02d}.nii.gz'.format(motion_dir, fr)
+        target = '{0}/sa_00.nii.gz'.format(motion_dir)
+        source = '{0}/sa_{1:02d}.nii.gz'.format(motion_dir, fr)
         par = '{0}/ffd_refine.cfg'.format(par_dir)
         dofin = '{0}/ffd_comp_00_to_{1:02d}.dof.gz'.format(motion_dir, fr)
         dof = '{0}/ffd_00_to_{1:02d}.dof.gz'.format(motion_dir, fr)

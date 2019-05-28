@@ -17,14 +17,14 @@ def imagePreprocessing(originalNii, data_dir, atlas_dir):
      
     os.system('headertool '
               '{0} '
-              '{1}/lvsa_.nii.gz '
+              '{1}/sa_.nii.gz '
               '-reset'
               .format(originalNii, data_dir))
 
     os.system('temporalalign '
               '{0}/temporal.gipl '
-              '{1}/lvsa_.nii.gz '
-              '{1}/lvsa_.nii.gz ' 
+              '{1}/sa_.nii.gz '
+              '{1}/sa_.nii.gz ' 
               '-St1 0 '
               '-St2 0 '
               '-Et1 1 '
@@ -32,14 +32,14 @@ def imagePreprocessing(originalNii, data_dir, atlas_dir):
               .format(atlas_dir, data_dir))
 
     os.system('autocontrast '
-              '{0}/lvsa_.nii.gz '
-              '{0}/lvsa_.nii.gz'
+              '{0}/sa_.nii.gz '
+              '{0}/sa_.nii.gz'
               .format(data_dir))
         
     os.system('cardiacphasedetection '
-              '{0}/lvsa_.nii.gz '
-              '{0}/lvsa_ED.nii.gz '
-              '{0}/lvsa_ES.nii.gz'
+              '{0}/sa_.nii.gz '
+              '{0}/sa_ED.nii.gz '
+              '{0}/sa_ES.nii.gz'
               .format(data_dir))
     
     print('  Image preprocessing is done ...')
@@ -160,8 +160,8 @@ def removeSegsAboveBase(data_dir, output_name):
 def formHighResolutionImg(subject_dir, fr): 
     
     os.system('resample ' 
-              '{0}/lvsa_{1}.nii.gz '
-              '{0}/lvsa_SR_{1}.nii.gz '
+              '{0}/sa_{1}.nii.gz '
+              '{0}/sa_SR_{1}.nii.gz '
               '-size 1.25 1.25 2'
               .format(subject_dir, fr))
         
@@ -176,13 +176,13 @@ def formHighResolutionImg(subject_dir, fr):
 def convertImageSegment(data_dir, fr):
    
     os.system('convert '
-              '{0}/seg_lvsa_SR_{1}.nii.gz '
+              '{0}/seg_sa_SR_{1}.nii.gz '
               '{0}/PHsegmentation_{1}.gipl'
               .format(data_dir, fr))
     
     os.system('cp '
-              '{0}/lvsa_SR_{1}.nii.gz '
-              '{0}/lvsa_{1}_enlarged_SR.nii.gz'
+              '{0}/sa_SR_{1}.nii.gz '
+              '{0}/sa_{1}_enlarged_SR.nii.gz'
               .format(data_dir, fr))
     
     
@@ -222,39 +222,39 @@ def outputVolumes(subject_dir, data_dir, subject, fr):
 def moveVolumes(subject_dir, sizes_dir, fr):
      
     os.system('cp '
-              '{0}/lvsa_{2}.nii.gz '
-              '{1}/lvsa_{2}.nii.gz'
+              '{0}/sa_{2}.nii.gz '
+              '{1}/sa_{2}.nii.gz'
               .format(subject_dir, sizes_dir, fr))
     
     os.system('rm '
-              '{0}/lvsa_{1}.nii.gz '
+              '{0}/sa_{1}.nii.gz '
               .format(subject_dir, fr))
     
     os.system('cp '
-              '{0}/seg_lvsa_{2}.nii.gz '
+              '{0}/seg_sa_{2}.nii.gz '
               '{1}/2D_segmentation_{2}.nii.gz'
               .format(subject_dir, sizes_dir, fr))
     
     os.system('rm '
-              '{0}/seg_lvsa_{1}.nii.gz '
+              '{0}/seg_sa_{1}.nii.gz '
               .format(subject_dir, fr))
     
     os.system('cp '
-              '{0}/lvsa_SR_{2}.nii.gz '
-              '{1}/lvsa_{2}_SR.nii.gz'
+              '{0}/sa_SR_{2}.nii.gz '
+              '{1}/sa_{2}_SR.nii.gz'
               .format(subject_dir, sizes_dir, fr))
     
     os.system('rm '
-              '{0}/lvsa_SR_{1}.nii.gz '
+              '{0}/sa_SR_{1}.nii.gz '
               .format(subject_dir, fr))
     
     os.system('cp '
-              '{0}/seg_lvsa_SR_{2}.nii.gz '
+              '{0}/seg_sa_SR_{2}.nii.gz '
               '{1}/3D_segmentation_{2}.nii.gz'
               .format(subject_dir, sizes_dir, fr))
     
     os.system('rm '
-              '{0}/seg_lvsa_SR_{1}.nii.gz '
+              '{0}/seg_sa_SR_{1}.nii.gz '
               .format(subject_dir, fr))
 
     

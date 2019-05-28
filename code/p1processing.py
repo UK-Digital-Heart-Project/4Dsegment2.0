@@ -24,9 +24,9 @@ def output2DRefinement(atlases, DLSeg, param_dir, tmps_dir, dofs_dir, subject_di
             
             os.system('mirtk transform-image '
                       '{0} '
-                      '{1}/seg_lvsa_{4}_{5}.nii.gz ' 
+                      '{1}/seg_sa_{4}_{5}.nii.gz ' 
                       '-dofin {2}/shapeffd_{4}_{5}.dof.gz '
-                      '-target {3}/lvsa_{5}.nii.gz -interp NN'  
+                      '-target {3}/sa_{5}.nii.gz -interp NN'  
                       .format(atlases[i], tmps_dir, dofs_dir, subject_dir, i, fr)) 
 
         else:
@@ -40,17 +40,17 @@ def output2DRefinement(atlases, DLSeg, param_dir, tmps_dir, dofs_dir, subject_di
                           
             os.system('transformation '
                       '{0} '
-                      '{1}/seg_lvsa_{4}_{5}.nii.gz ' 
+                      '{1}/seg_sa_{4}_{5}.nii.gz ' 
                       '-dofin {2}/shapeffd_{4}_{5}.dof.gz '
-                      '-target {3}/lvsa_{5}.nii.gz -nn' 
+                      '-target {3}/sa_{5}.nii.gz -nn' 
                       .format(atlases[i], tmps_dir, dofs_dir, subject_dir, i, fr))    
 
-        segstring += '{0}/seg_lvsa_{1}_{2}.nii.gz '.format(tmps_dir, i, fr)
+        segstring += '{0}/seg_sa_{1}_{2}.nii.gz '.format(tmps_dir, i, fr)
                 
         ind += 1
         
     # apply label fusion 
-    os.system('combineLabels {0}/seg_lvsa_{1}.nii.gz {2} {3}'.format(subject_dir, fr, ind, segstring))
+    os.system('combineLabels {0}/seg_sa_{1}.nii.gz {2} {3}'.format(subject_dir, fr, ind, segstring))
 
     
 def apply_PC(subject, data_dir, param_dir, atlases_list, landmarks_list, mirtk):
@@ -71,7 +71,7 @@ def apply_PC(subject, data_dir, param_dir, atlases_list, landmarks_list, mirtk):
                                   
         for fr in ['ED', 'ES']:
                 
-            DLSeg = '{0}/seg_lvsa_{1}.nii.gz'.format(segs_dir, fr)
+            DLSeg = '{0}/seg_sa_{1}.nii.gz'.format(segs_dir, fr)
             
             if not os.path.exists(DLSeg):
                 
@@ -84,7 +84,7 @@ def apply_PC(subject, data_dir, param_dir, atlases_list, landmarks_list, mirtk):
                                       
             output2DRefinement(topSimilarAtlases_list, DLSeg, param_dir, tmps_dir, dofs_dir, subject_dir, savedInd, fr, mirtk)
                 
-            refineFusionResults(subject_dir, 'seg_lvsa_{0}.nii.gz'.format(fr), 2)       
+            refineFusionResults(subject_dir, 'seg_sa_{0}.nii.gz'.format(fr), 2)       
             
         print('  finish 2D nonrigid-registering one subject {}'.format(subject))
     
@@ -141,7 +141,7 @@ def multiatlasreg2D(dir_0, dir_1, dir_2, coreNo, parallel, mirtk):
             
             for fr in ['ED', 'ES']:
                     
-                DLSeg = '{0}/seg_lvsa_{1}.nii.gz'.format(segs_dir, fr)
+                DLSeg = '{0}/seg_sa_{1}.nii.gz'.format(segs_dir, fr)
                 
                 if not os.path.exists(DLSeg):
                 
@@ -154,7 +154,7 @@ def multiatlasreg2D(dir_0, dir_1, dir_2, coreNo, parallel, mirtk):
                                       
                 output2DRefinement(topSimilarAtlases_list, DLSeg, param_dir, tmps_dir, dofs_dir, subject_dir, savedInd, fr, mirtk)
                 
-                refineFusionResults(subject_dir, 'seg_lvsa_{0}.nii.gz'.format(fr), 2)       
+                refineFusionResults(subject_dir, 'seg_sa_{0}.nii.gz'.format(fr), 2)       
                               
  
             print('  finish 2D nonrigid-registering one subject {}'.format(subject))
