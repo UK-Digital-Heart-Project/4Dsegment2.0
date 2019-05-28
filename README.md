@@ -10,7 +10,7 @@ The code in this repository implements 4D*segment*, a pipeline for carrying out 
 # Testing phases
 
 * Test code in small sample (28-May-2019)
-   *  Wenjia's model has one fewer label than Jinming's, solution change atlas dir: patchmatchSegmentation\3datlas2
+   
 
 
 
